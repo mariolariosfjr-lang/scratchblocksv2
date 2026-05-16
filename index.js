@@ -103,6 +103,24 @@ export default function (window) {
     el.appendChild(container)
   }
 
+  // convert HTML to Scratch blocks
+  function htmlToScratch(html, options) {
+    options = {
+      style: "scratch2",
+      inline: false,
+      ...options,
+    }
+
+    const pre = document.createElement("pre")
+    pre.innerHTML = html.replace(/<br>\s?|\n|\r\n|\r/gi, "\n")
+    const code = pre.textContent
+
+    const doc = parse(code, options)
+    const svg = render(doc, options)
+
+    return svg
+  }
+
   /* Render all matching elements in page to shiny scratch blocks.
    * Accepts a CSS selector as an argument.
    *
@@ -162,6 +180,7 @@ export default function (window) {
     replace: replace,
     render: render,
     renderMatching: renderMatching,
+    htmlToScratch: htmlToScratch,
 
     appendStyles: appendStyles,
   }
